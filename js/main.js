@@ -68,7 +68,7 @@ var GameState = {
 
   },
 switchAnimal: function(sprite, event) {
-  console.log('move animals');
+  console.log('move animal');
 },
 
 animateAnimal: function(sprite, event) {
