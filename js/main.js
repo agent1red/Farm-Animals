@@ -95,7 +95,19 @@ var GameState = {
 
   },
 switchAnimal: function(sprite, event) {
-   
+   //get the direction of the arrow
+if (sprite.customParams.direction > 0) {
+newAnimal = this.animals.next();
+endX 640 + this.currentAnimal.width/2;
+} else {
+new = this.animals.previous();
+endX = - this.currentAnimal.width/2;
+}
+   //get the next animal
+
+   //move current animal to final destination
+
+   //set the next animal as the new animal in view
 },
 
 animateAnimal: function(sprite, event) {
