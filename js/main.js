@@ -9,14 +9,7 @@ var GameState = {
     this.load.image('pig', 'assets/images/pig.png');
     this.load.image('sheep', 'assets/images/sheep.png');
     this.load.image('arrow', 'assets/images/arrow.png');
-
-
-
-
   },
-
-
-
   //executed after everything is loaded
   create: function() {
 
@@ -24,19 +17,9 @@ var GameState = {
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     this.scale.pageAlignHorizontally = true;
     this.scale.pageAlignVertically = true;
-
-
     //create sprites and position them
     this.background = this.game.add.sprite(0, 0,'background');
-    this.horse = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY,'horse');
-    this.horse.anchor.setTo(0.5);
-    this.horse.scale.setTo(1);
-    ;
     //animate sprites
-    this.horse.inputEnabled = true;
-    this.horse.input.pixelPerfectClick = true;
-    this.horse.events.onInputDown.add(this.animateAnimal, this)
-
     // group of animals in an array along with array text
     var animalData = [
       {key: 'chicken' , text: 'CHICKEN'},
@@ -45,12 +28,12 @@ var GameState = {
       {key: 'sheep' , text: 'SHEEP'}
     ];
     this.animals = this.game.add.group();
-
-    var self = this;
-
+    var self = this
+    var animal;
     //for each function loop that will loop through the animal elements.
     animalData.forEach(function(element){
-    animal =  self.animals.create(200, self.game.world.centerY, element.key);
+      // set variblae animal to -1000 to make sure elements of array that are not the current animal view are off the map
+    animal =  self.animals.create(-1000, self.game.world.centerY, element.key, 0);
     animal.customParams = {text: element.text};
     animal.anchor.setTo(0.5);
     animal.inputEnabled = true;
@@ -58,12 +41,12 @@ var GameState = {
     animal.events.onInputDown.add(self.animateAnimal, self);
 
     });
-
+// first animal goes to center of map
     this.currentAnimal = this.animals.next();
     // set position of animal from the array element
     this.currentAnimal.position.set(this.game.world.centerX, this.game.world.centerY);
 // left arrow
-    this.leftArrow = this.game.add.sprite(80, this.game.world.centerY, 'arrow');
+    this.leftArrow = this.game.add.sprite(60, this.game.world.centerY, 'arrow');
     this.leftArrow.anchor.setTo(0.5);
     this.leftArrow.scale.x = -1;
     //left arrow custom paramater giving direction to the left -1
@@ -76,7 +59,7 @@ var GameState = {
 
 
 // right arrow
-    this.rightArrow = this.game.add.sprite(560, this.game.world.centerY, 'arrow');
+    this.rightArrow = this.game.add.sprite(580, this.game.world.centerY, 'arrow');
     this.rightArrow.anchor.setTo(0.5);
     //right arrow custom paramater giving direction to the right +1
     this.rightArrow.customParams = {direction: 1};
@@ -95,24 +78,55 @@ var GameState = {
 
   },
 switchAnimal: function(sprite, event) {
+  var newAnimal, endX;
+
+//method for disabling arrows during switch movement
+
+if(this.isMoving) {
+  return false;
+}
+
+this.isMoving = true;
+
+
    //get the direction of the arrow
 if (sprite.customParams.direction > 0) {
+  // these are the initial position of the element animal
 newAnimal = this.animals.next();
-endX 640 + this.currentAnimal.width/2;
+newAnimal.x = -newAnimal.width/2;
+endX = 640 + this.currentAnimal.width/2;
 } else {
-new = this.animals.previous();
+  //these are the initial position of the element animal
+newAnimal = this.animals.previous();
+newAnimal.x = 640 + newAnimal.width/2;
 endX = - this.currentAnimal.width/2;
 }
-   //get the next animal
+   //Tween animation - smooth motion of sprites this part defines how the new animal will move from off map
 
-   //move current animal to final destination
+   var newAnimalMovement = this.game.add.tween(newAnimal);
 
-   //set the next animal as the new animal in view
+   //the newAnimalMovement will be sent "to" position x which is centered to world "or game board" center and 1000 miliseconds or 1 second speed
+   newAnimalMovement.to({x: this.game.world.centerX}, 1000);
+   //calling method to pass if moving stops "false" then another animall can move 
+   newAnimalMovement.onComplete.add(function(){
+     this.isMoving = false;
+   }, this);
+   //Tween initiated and now needs to start
+   newAnimalMovement.start();
+
+
+   // Tween animation - smooth animation for current animal to move off map
+
+   var currentAnimalMovement = this.game.add.tween(this.currentAnimal);
+      currentAnimalMovement.to({x: endX}, 1000);
+      currentAnimalMovement.start();
+
+      this.currentAnimal = newAnimal;
 },
 
 animateAnimal: function(sprite, event) {
   console.log('animate animal');
-},
+}
 
 };
 
