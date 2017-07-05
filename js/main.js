@@ -16,6 +16,13 @@ var GameState = {
     this.load.spritesheet('pig', 'assets/images/pig_spritesheet.png',297, 200, 3);
     this.load.spritesheet('sheep', 'assets/images/sheep_spritesheet.png',244, 200, 3);
 
+    // preload audio
+
+    this.load.audio('chickenSound',['assets/audio/chicken.oog','assets/audio/chicken.mp3']);
+    this.load.audio('horseSound',['assets/audio/horse.oog','assets/audio/horse.mp3']);
+    this.load.audio('pigSound',['assets/audio/pig.mp3','assets/audio/pig.mp3']);
+    this.load.audio('sheepSound',['assets/audio/sheep.oog','assets/audio/sheep.mp3']);
+
 
 
   },
@@ -31,10 +38,10 @@ var GameState = {
     //animate sprites
     // group of animals in an array along with array text
     var animalData = [
-      {key: 'chicken' , text: 'CHICKEN'},
-      {key: 'horse' , text: 'HORSE'},
-      {key: 'pig' , text: 'PIG'},
-      {key: 'sheep' , text: 'SHEEP'}
+      {key: 'chicken' , text: 'CHICKEN', audio: 'chickenSound'},
+      {key: 'horse' , text: 'HORSE' , audio: 'horseSound'},
+      {key: 'pig' , text: 'PIG' , audio: 'pigSound'},
+      {key: 'sheep' , text: 'SHEEP' , audio: 'sheepSound'}
     ];
     this.animals = this.game.add.group();
     var self = this
@@ -43,7 +50,7 @@ var GameState = {
     animalData.forEach(function(element){
       // set variblae animal to -1000 to make sure elements of array that are not the current animal view are off the map
     animal =  self.animals.create(-1000, self.game.world.centerY, element.key, 0);
-    animal.customParams = {text: element.text};
+    animal.customParams = {text: element.key, sound: self.game.add.audio(element.audio)};
     animal.anchor.setTo(0.5);
 
     // creating animation of spritesheet here
@@ -145,6 +152,9 @@ animateAnimal: function(sprite, event) {
 
   //then use sprite.play and the name of the animation method on line 52
   sprite.play('animate');
+
+  // play the sound
+  sprite.customParams.sound.play();
 }
 
 };
