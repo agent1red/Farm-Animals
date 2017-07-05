@@ -12,12 +12,13 @@ var GameState = {
 
 
 
+
   },
+
 
 
   //executed after everything is loaded
   create: function() {
-
 
     //define the scale mode for the game
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -35,6 +36,32 @@ var GameState = {
     this.horse.inputEnabled = true;
     this.horse.input.pixelPerfectClick = true;
     this.horse.events.onInputDown.add(this.animateAnimal, this)
+
+    // group of animals in an array along with array text
+    var animalData = [
+      {key: 'chicken' , text: 'CHICKEN'},
+      {key: 'horse' , text: 'HORSE'},
+      {key: 'pig' , text: 'PIG'},
+      {key: 'sheep' , text: 'SHEEP'}
+    ];
+    this.animals = this.game.add.group();
+
+    var self = this;
+
+    //for each function loop that will loop through the animal elements.
+    animalData.forEach(function(element){
+    animal =  self.animals.create(200, self.game.world.centerY, element.key);
+    animal.customParams = {text: element.text};
+    animal.anchor.setTo(0.5);
+    animal.inputEnabled = true;
+    animal.pixelPerfectClick = true;
+    animal.events.onInputDown.add(self.animateAnimal, self);
+
+    });
+
+    this.currentAnimal = this.animals.next();
+    // set position of animal from the array element
+    this.currentAnimal.position.set(this.game.world.centerX, this.game.world.centerY);
 // left arrow
     this.leftArrow = this.game.add.sprite(80, this.game.world.centerY, 'arrow');
     this.leftArrow.anchor.setTo(0.5);
@@ -68,7 +95,7 @@ var GameState = {
 
   },
 switchAnimal: function(sprite, event) {
-  console.log('move animal');
+   
 },
 
 animateAnimal: function(sprite, event) {
