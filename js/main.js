@@ -4,11 +4,20 @@ var GameState = {
   //load the game assets before the game starts
   preload: function() {
     this.load.image('background', 'assets/images/background.png');
-    this.load.image('chicken', 'assets/images/chicken.png');
+    this.load.image('arrow', 'assets/images/arrow.png');
+    /*this.load.image('chicken', 'assets/images/chicken.png');
     this.load.image('horse', 'assets/images/horse.png');
     this.load.image('pig', 'assets/images/pig.png');
-    this.load.image('sheep', 'assets/images/sheep.png');
-    this.load.image('arrow', 'assets/images/arrow.png');
+    this.load.image('sheep', 'assets/images/sheep.png');*/
+
+    // sprite sheet preload code - last part specifies the width, height, and specific frame to start with
+    this.load.spritesheet('chicken', 'assets/images/chicken_spritesheet.png', 131, 200, 3);
+    this.load.spritesheet('horse', 'assets/images/horse_spritesheet.png',212, 200, 3);
+    this.load.spritesheet('pig', 'assets/images/pig_spritesheet.png',297, 200, 3);
+    this.load.spritesheet('sheep', 'assets/images/sheep_spritesheet.png',244, 200, 3);
+
+
+
   },
   //executed after everything is loaded
   create: function() {
@@ -36,6 +45,14 @@ var GameState = {
     animal =  self.animals.create(-1000, self.game.world.centerY, element.key, 0);
     animal.customParams = {text: element.text};
     animal.anchor.setTo(0.5);
+
+    // creating animation of spritesheet here
+
+    // call animations.add - call the animation a name (key value), then tell it to play what frames in what sequence, then at how many seconds, then enable or disable looping in this case looping false
+    animal.animations.add('animate', [0,1,2,1,0,1], 3, false);
+
+
+
     animal.inputEnabled = true;
     animal.pixelPerfectClick = true;
     animal.events.onInputDown.add(self.animateAnimal, self);
@@ -107,7 +124,7 @@ endX = - this.currentAnimal.width/2;
 
    //the newAnimalMovement will be sent "to" position x which is centered to world "or game board" center and 1000 miliseconds or 1 second speed
    newAnimalMovement.to({x: this.game.world.centerX}, 1000);
-   //calling method to pass if moving stops "false" then another animall can move 
+   //calling method to pass if moving stops "false" then another animall can move
    newAnimalMovement.onComplete.add(function(){
      this.isMoving = false;
    }, this);
@@ -125,7 +142,9 @@ endX = - this.currentAnimal.width/2;
 },
 
 animateAnimal: function(sprite, event) {
-  console.log('animate animal');
+
+  //then use sprite.play and the name of the animation method on line 52
+  sprite.play('animate');
 }
 
 };
