@@ -5,10 +5,7 @@ var GameState = {
   preload: function() {
     this.load.image('background', 'assets/images/background.png');
     this.load.image('arrow', 'assets/images/arrow.png');
-    /*this.load.image('chicken', 'assets/images/chicken.png');
-    this.load.image('horse', 'assets/images/horse.png');
-    this.load.image('pig', 'assets/images/pig.png');
-    this.load.image('sheep', 'assets/images/sheep.png');*/
+
 
     // sprite sheet preload code - last part specifies the width, height, and specific frame to start with
     this.load.spritesheet('chicken', 'assets/images/chicken_spritesheet.png', 131, 200, 3);
@@ -39,7 +36,7 @@ var GameState = {
     // group of animals in an array along with array text
     var animalData = [{
         key: 'chicken',
-        text: 'A BUTT HAHA',
+        text: 'hhhhh',
         audio: 'chickenSound'
       },
       {
