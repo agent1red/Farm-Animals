@@ -39,7 +39,7 @@ var GameState = {
     // group of animals in an array along with array text
     var animalData = [{
         key: 'chicken',
-        text: 'CHICKEN',
+        text: 'A BUTT HAHA',
         audio: 'chickenSound'
       },
       {
