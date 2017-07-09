@@ -63,7 +63,7 @@ var GameState = {
       // set variblae animal to -1000 to make sure elements of array that are not the current animal view are off the map
       animal = self.animals.create(-1000, self.game.world.centerY, element.key, 0);
       animal.customParams = {
-        text: element.key,
+        text: element.text,
         sound: self.game.add.audio(element.audio)
       };
       animal.anchor.setTo(0.5);
