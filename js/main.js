@@ -41,7 +41,7 @@ var GameState = {
       },
       {
         key: 'horse',
-        text: 'HORSE',
+        text: 'HORSE of Course',
         audio: 'horseSound'
       },
       {
