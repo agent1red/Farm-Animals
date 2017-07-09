@@ -69,6 +69,11 @@ var GameState = {
     this.currentAnimal = this.animals.next();
     // set position of animal from the array element
     this.currentAnimal.position.set(this.game.world.centerX, this.game.world.centerY);
+// show text decribing animal
+
+    this.showText(this.currentAnimal);
+
+
 // left arrow
     this.leftArrow = this.game.add.sprite(60, this.game.world.centerY, 'arrow');
     this.leftArrow.anchor.setTo(0.5);
@@ -102,7 +107,7 @@ var GameState = {
 
   },
 switchAnimal: function(sprite, event) {
-  var newAnimal, endX;
+
 
 //method for disabling arrows during switch movement
 
@@ -112,7 +117,10 @@ if(this.isMoving) {
 
 this.isMoving = true;
 
+// hide animal text
+  this.animalText.visible = false;
 
+var newAnimal, endX;
    //get the direction of the arrow
 if (sprite.customParams.direction > 0) {
   // these are the initial position of the element animal
@@ -134,6 +142,7 @@ endX = - this.currentAnimal.width/2;
    //calling method to pass if moving stops "false" then another animall can move
    newAnimalMovement.onComplete.add(function(){
      this.isMoving = false;
+     this.showText(newAnimal);
    }, this);
    //Tween initiated and now needs to start
    newAnimalMovement.start();
@@ -148,14 +157,28 @@ endX = - this.currentAnimal.width/2;
       this.currentAnimal = newAnimal;
 },
 
-animateAnimal: function(sprite, event) {
 
+animateAnimal: function(sprite, event) {
   //then use sprite.play and the name of the animation method on line 52
   sprite.play('animate');
-
   // play the sound
   sprite.customParams.sound.play();
-}
+},
+//show text from animal array of elements with style
+showText: function(animal) {
+if (!this.animalText) {
+  var style = {
+        font: 'bold pt Arial',
+        fill: '#D0171B',
+        align: 'center'
+      }
+      this.animalText = this.game.add.text(this.game.width/2, this.game.height * 0.85, '' );
+      this.animalText.anchor.setTo(0.5);
+    }
+      this.animalText.setText(animal.customParams.text);
+      this.animalText.visible = true;
+    }
+
 
 };
 
